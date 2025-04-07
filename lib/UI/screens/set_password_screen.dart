@@ -1,8 +1,11 @@
 import 'package:flutter_task_manager_api_project/UI/screens/RegisterScreen.dart';
+import 'package:flutter_task_manager_api_project/UI/screens/UserHomeScreen.dart';
 import 'package:flutter_task_manager_api_project/UI/screens/log_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_task_manager_api_project/UI/widgets/backgroundSVG.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../Data/model/task.dart';
 
 class SetPasswordScreen extends StatefulWidget {
   const SetPasswordScreen({super.key});
@@ -15,7 +18,12 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
 
   TextEditingController setPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
-
+  List<Task> tasks = [
+    Task('University', "after eid", "new"),
+    Task('Mosque', "after migration", "Completed"),
+    Task('Hajj', "after having descent amount of money", "Canceled"),
+    Task('Charity', "51% of income inshaAllah", "Progress"),
+  ];
   @override
   void dispose() {
     setPasswordController.dispose();
@@ -26,7 +34,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Backgroundsvg(
+      body: BackgroundSvg(
         child: Form(
           key: GlobalKey(),
           child: SingleChildScrollView(
@@ -73,7 +81,10 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterScreen()));
+                      Navigator.pushReplacementNamed(context, '/home', arguments: {
+                        'data' : "Ragib Shahariar",
+                        'email': "ragibshahriar07@gmail.com"
+                      });
                     },
                     child: Icon(Icons.double_arrow_sharp, color: Colors.white),
                   ),

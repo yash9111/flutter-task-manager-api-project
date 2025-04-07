@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 
-class PinVerificationScreen extends StatefulWidget {
-  const PinVerificationScreen({super.key});
+class ForgetPasswordPinVerificationScreen extends StatefulWidget {
+  const ForgetPasswordPinVerificationScreen({super.key});
 
   @override
-  State<PinVerificationScreen> createState() => _PinVerificationScreenState();
+  State<ForgetPasswordPinVerificationScreen> createState() => _ForgetPasswordPinVerificationScreenState();
 }
 
-class _PinVerificationScreenState extends State<PinVerificationScreen> {
+class _ForgetPasswordPinVerificationScreenState extends State<ForgetPasswordPinVerificationScreen> {
   final List<TextEditingController> _controllers = List.generate(5, (_) => TextEditingController(),);
   final List<FocusNode> _focusNodes = List.generate(5, (_) => FocusNode());
 
@@ -67,7 +67,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Backgroundsvg(
+      body: BackgroundSvg(
         child: Form(
           key: GlobalKey(),
           child: SingleChildScrollView(

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter_task_manager_api_project/UI/widgets/backgroundSVG.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_task_manager_api_project/UI/screens/log_in_screen.dart';
 import 'package:flutter/material.dart';
@@ -28,23 +29,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          SvgPicture.asset(
-            'assets/images/background.svg',
-            height: double.infinity,
-            width: double.infinity,
-            fit: BoxFit.cover,
-          ),
-          Positioned(
-            top: 0,
-            bottom: 0,
-            left: 34.w,
-            right: 34.w,
-            child: SvgPicture.asset('assets/images/logo.svg'),
-          ),
-        ],
-      ),
+      body: BackgroundSvg(
+        child: Positioned(
+            top: 40.h,
+            bottom: 40.h,
+            right: 30.w,
+            left: 30.w,
+            child: SvgPicture.asset('assets/images/logo.svg',)),
+      )
     );
   }
 }

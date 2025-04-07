@@ -32,7 +32,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Backgroundsvg(
+      body: BackgroundSvg(
         child:  SingleChildScrollView(
           padding: EdgeInsets.all(8),
           child:Form(

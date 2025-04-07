@@ -3,10 +3,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_task_manager_api_project/UI/Utils/assetImagesUrl.dart';
 
-class Backgroundsvg extends StatelessWidget {
-  Backgroundsvg({super.key, this.child});
+class BackgroundSvg extends StatelessWidget {
+  const BackgroundSvg({super.key, this.child});
 
-  Widget? child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {

@@ -1,20 +1,20 @@
-import 'package:flutter_task_manager_api_project/UI/screens/pin_verification.dart';
+import 'package:flutter_task_manager_api_project/UI/screens/ForgetPasswordPinVerificationScreen.dart';
 import 'package:flutter_task_manager_api_project/UI/widgets/backgroundSVG.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class ForgetPasswordEmailScreen extends StatefulWidget {
+  const ForgetPasswordEmailScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<ForgetPasswordEmailScreen> createState() => _ForgetPasswordEmailScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _ForgetPasswordEmailScreenState extends State<ForgetPasswordEmailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Backgroundsvg(
+      body: BackgroundSvg(
         child: Form(
           key: GlobalKey(),
           child: SingleChildScrollView(
@@ -48,7 +48,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => PinVerificationScreen(),
+                          builder: (context) => ForgetPasswordPinVerificationScreen(),
                         ),
                       );
                     },

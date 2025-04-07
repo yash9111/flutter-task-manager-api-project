@@ -31,7 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Backgroundsvg(
+      body: BackgroundSvg(
         child: Form(
           key: GlobalKey(),
           child: SingleChildScrollView(
@@ -91,7 +91,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/home', arguments: {
+                      Navigator.pushReplacementNamed(context, '/home', arguments: {
                         'data' : "${joinFNameController.text} ${joinLNameController.text}",
                         'email': "${joinEmailController.text}"
                       });

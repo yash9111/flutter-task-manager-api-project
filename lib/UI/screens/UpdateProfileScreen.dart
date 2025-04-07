@@ -13,7 +13,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Backgroundsvg(
+      body: BackgroundSvg(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(8),
           child: Column(
