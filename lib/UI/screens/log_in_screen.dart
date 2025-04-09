@@ -56,11 +56,22 @@ class _LogInScreenState extends State<LogInScreen> {
                 TextFormField(
                   controller: _emailTEController,
                   decoration: InputDecoration(hintText: 'Email'),
+                  validator: (value){
+                    if (value == null || value.isEmpty){
+                      return 'Enter your email';
+                    }
+                    return null;
+                  },
                 ),
                 TextFormField(
                   obscureText: true,
                   controller: _passwordTEController,
-                  decoration: InputDecoration(hintText: 'Password'),
+                  decoration: InputDecoration(hintText: 'Password'),                  validator: (value){
+                  if (value == null || value.isEmpty){
+                    return 'Enter password to login';
+                  }
+                  return null;
+                },
                 ),
                 Visibility(
                   child: SizedBox(
@@ -128,6 +139,40 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
+  Future<void> _logIn() async {
+    if (_formKey.currentState!.validate()){
+      _loginInProgress = true;
+      setState(() {});
+
+      Map<String, dynamic> requestBody = {
+        "email": _emailTEController.text.trim(),
+        "password": _passwordTEController.text,
+      };
+
+      NetworkResponse response = await NetworkClient.postRequest(
+        url: Urls.loginUrl,
+        body: requestBody,
+      );
+      _loginInProgress = false;
+      setState(() {});
+
+      if (response.isSuccess) {
+        LoginModel loginModel = LoginModel.fromJason(response.data!);
+        await AuthController.saveUserInformation(
+          loginModel.token,
+          loginModel.userModel,
+        );
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => UserHomeScreen()),
+          (predicate) => false,
+        );
+      } else {
+        showSnackBarMessage(context, response.errorMassage!, true);
+      }
+    }
+  }
+
   @override
   void dispose() {
     _emailTEController.dispose();
@@ -136,34 +181,4 @@ class _LogInScreenState extends State<LogInScreen> {
     super.dispose();
   }
 
-  Future<void> _logIn() async {
-    _loginInProgress = true;
-    setState(() {});
-    Map<String, dynamic> requestBody = {
-      "email": _emailTEController.text.trim(),
-      "password": _passwordTEController.text,
-    };
-
-    NetworkResponse response = await NetworkClient.postRequest(
-      url: Urls.loginUrl,
-      body: requestBody,
-    );
-    _loginInProgress = false;
-    setState(() {});
-
-    if (response.isSuccess) {
-      LoginModel loginModel = LoginModel.fromJason(response.data!);
-      AuthController.saveUserInformation(
-        loginModel.token,
-        loginModel.userModel,
-      );
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => UserHomeScreen()),
-        (predicate) => false,
-      );
-    }else{
-      showSnackBarMessage(context, response.errorMassage!, true);
-    }
-  }
 }

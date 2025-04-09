@@ -17,12 +17,24 @@ class ProgressTaskScreen extends StatefulWidget {
 class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
   @override
   Widget build(BuildContext context) {
-    List<Task> completedTask = widget.tasks.where((task) => task.status == taskStatus.Progress).toList();
+    List<Task> progressTasks = widget.tasks.where((task) => task.status == taskStatus.Progress).toList();
     return ListView.separated(
-      itemCount: completedTask.length,
+      itemCount: progressTasks.length,
       itemBuilder: (context, index) {
-        return TaskCard(task: completedTask[index], index: index, getChipColor: widget.getChipColor, deleteTask: widget.deleteTask);
-
+        if (index == progressTasks.length - 1){
+          return Column(
+            children: [
+              TaskCard(
+                task: progressTasks[index],
+                index: index,
+                getChipColor: widget.getChipColor,
+                deleteTask: widget.deleteTask,
+              ),
+              SizedBox(height: 67),
+            ],
+          );
+        }
+        return TaskCard(task: progressTasks[index], index: index, getChipColor: widget.getChipColor, deleteTask: widget.deleteTask);
       },
       separatorBuilder: (context, index) => const SizedBox(height: 5),);
   }

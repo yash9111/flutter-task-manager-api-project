@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_task_manager_api_project/UI/screens/AddItem.dart';
+import 'package:flutter_task_manager_api_project/UI/screens/add_task.dart';
 import 'package:flutter_task_manager_api_project/UI/widgets/summary_card.dart';
 import 'package:sizer/sizer.dart';
 
@@ -147,28 +147,6 @@ class UserHomeScreen extends StatefulWidget {
 class _UserHomeScreenState extends State<UserHomeScreen> {
   final bool _isFirstLogin = false;
   int selectedIndex = 0;
-
-  void showWelcomeMessage() {
-    final args =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text("Welcome", textAlign: TextAlign.center),
-            content: Column(
-              mainAxisSize: MainAxisSize.min, // Prevent overflow issues
-              children: [
-                Text(args?['data'] ?? "No Data"),
-                SizedBox(height: 10),
-                Text('Sign In Successful'),
-              ],
-            ),
-            backgroundColor: Colors.green,
-          ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

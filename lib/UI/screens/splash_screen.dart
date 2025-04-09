@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:flutter_task_manager_api_project/UI/Controllers/auth_controller.dart';
+import 'package:flutter_task_manager_api_project/UI/screens/UserHomeScreen.dart';
 import 'package:flutter_task_manager_api_project/UI/widgets/backgroundSVG.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_task_manager_api_project/UI/screens/log_in_screen.dart';
@@ -21,9 +23,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _moveToNextScreen() async {
     await Future.delayed(const Duration(seconds: 2));
+    
+    final bool userLoggedIn = await AuthController.checkIfUserLoggedIn();
+    
     Navigator.of(
       context,
-    ).pushReplacement(MaterialPageRoute(builder: (context) => LogInScreen()));
+    ).pushReplacement(MaterialPageRoute(builder: (context) => (userLoggedIn) ? UserHomeScreen() : LogInScreen()));
   }
 
   @override

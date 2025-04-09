@@ -18,16 +18,19 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   TextEditingController newTaskController = TextEditingController();
   TextEditingController newTaskDescriptionController = TextEditingController();
 
+  void addTask(String title, String description){
+    Task newTask = Task(title, description, taskStatus.New);
+    widget.tasks.add(newTask);
+    setState(() {});
+  }
+
   void dispose() {
     newTaskController.dispose();
     newTaskDescriptionController.dispose();
     super.dispose();
   }
 
-  void addTask(String title, String description){
-    Task newTask = Task(title, description, taskStatus.New);
-    widget.tasks.add(newTask);
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +84,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                   child: ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        addTask(newTaskController.text, newTaskDescriptionController.text);
+                        addTask(newTaskController.text.trim(), newTaskDescriptionController.text.trim());
                         Navigator.pop(context);
                       });
                     },

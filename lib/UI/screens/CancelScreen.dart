@@ -21,8 +21,20 @@ class _CancelScreenState extends State<CancelScreen> {
     return ListView.separated(
       itemCount: canceledTasks.length,
       itemBuilder: (context, index) {
+        if (index == canceledTasks.length - 1){
+          return Column(
+            children: [
+              TaskCard(
+                task: canceledTasks[index],
+                index: index,
+                getChipColor: widget.getChipColor,
+                deleteTask: widget.deleteTask,
+              ),
+              SizedBox(height: 67),
+            ],
+          );
+        }
         return TaskCard(task: canceledTasks[index], index: index, getChipColor: widget.getChipColor, deleteTask: widget.deleteTask);
-
       },
       separatorBuilder: (context, index) => const SizedBox(height: 5),);
   }

@@ -17,12 +17,24 @@ class CompletedTaskScreen extends StatefulWidget {
 class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
   @override
   Widget build(BuildContext context) {
-    List<Task> completedTask = widget.tasks.where((task) => task.status == taskStatus.Complete).toList();
+    List<Task> completedTasks = widget.tasks.where((task) => task.status == taskStatus.Complete).toList();
     return ListView.separated(
-      itemCount: completedTask.length,
+      itemCount: completedTasks.length,
       itemBuilder: (context, index) {
-        return TaskCard(task: completedTask[index], index: index, getChipColor: widget.getChipColor, deleteTask: widget.deleteTask);
-
+        if (index == completedTasks.length - 1){
+          return Column(
+            children: [
+              TaskCard(
+                task: completedTasks[index],
+                index: index,
+                getChipColor: widget.getChipColor,
+                deleteTask: widget.deleteTask,
+              ),
+              SizedBox(height: 67),
+            ],
+          );
+        }
+        return TaskCard(task: completedTasks[index], index: index, getChipColor: widget.getChipColor, deleteTask: widget.deleteTask);
       },
       separatorBuilder: (context, index) => const SizedBox(height: 5),);
   }

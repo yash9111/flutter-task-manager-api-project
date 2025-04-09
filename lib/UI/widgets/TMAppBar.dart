@@ -12,8 +12,6 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.green,
-      automaticallyImplyLeading: false,
-      toolbarHeight: 63,
       title: GestureDetector(
         onTap: (){
           if (fromProfileScreen ?? false){

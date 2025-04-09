@@ -4,7 +4,12 @@ import 'package:flutter_task_manager_api_project/UI/widgets/TaskCard.dart';
 import '../../Data/model/task.dart';
 
 class NewTaskScreen extends StatefulWidget {
-  const NewTaskScreen({super.key, required this.tasks, required this.deleteTask, required this.getChipColor});
+  const NewTaskScreen({
+    super.key,
+    required this.tasks,
+    required this.deleteTask,
+    required this.getChipColor,
+  });
 
   final List<Task> tasks;
   final void Function(int) deleteTask;
@@ -17,13 +22,32 @@ class NewTaskScreen extends StatefulWidget {
 class _NewTaskScreenState extends State<NewTaskScreen> {
   @override
   Widget build(BuildContext context) {
-    List<Task> newTasks = widget.tasks.where((task) => task.status == taskStatus.New).toList();
+    List<Task> newTasks =
+        widget.tasks.where((task) => task.status == taskStatus.New).toList();
     return ListView.separated(
       itemCount: newTasks.length,
       itemBuilder: (context, index) {
-        return TaskCard(task: newTasks[index], index: index, getChipColor: widget.getChipColor, deleteTask: widget.deleteTask);
-
+        if (index == newTasks.length - 1) {
+          return Column(
+            children: [
+              TaskCard(
+                task: newTasks[index],
+                index: index,
+                getChipColor: widget.getChipColor,
+                deleteTask: widget.deleteTask,
+              ),
+              SizedBox(height: 67),
+            ],
+          );
+        }
+        return TaskCard(
+          task: newTasks[index],
+          index: index,
+          getChipColor: widget.getChipColor,
+          deleteTask: widget.deleteTask,
+        );
       },
-      separatorBuilder: (context, index) => const SizedBox(height: 5),);
+      separatorBuilder: (context, index) => const SizedBox(height: 5),
+    );
   }
 }
