@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_task_manager_api_project/Data/Services/network_client.dart';
+import 'package:flutter_task_manager_api_project/Data/model/login_model.dart';
+import 'package:flutter_task_manager_api_project/UI/Controllers/auth_controller.dart';
 import 'package:flutter_task_manager_api_project/UI/screens/RegisterScreen.dart';
+import 'package:flutter_task_manager_api_project/UI/screens/UserHomeScreen.dart';
 import 'package:flutter_task_manager_api_project/UI/widgets/backgroundSVG.dart';
 import 'package:flutter_task_manager_api_project/UI/screens/ForgetPasswordEmailScreen.dart';
+import 'package:flutter_task_manager_api_project/UI/widgets/show_snakbar_message.dart';
 import 'package:sizer/sizer.dart';
+import 'package:flutter_task_manager_api_project/Data/utils/urls.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -57,9 +63,12 @@ class _LogInScreenState extends State<LogInScreen> {
                   decoration: InputDecoration(hintText: 'Password'),
                 ),
                 Visibility(
-                  child: ElevatedButton(
-                    onPressed: _onTapSignInButton,
-                    child: Icon(Icons.double_arrow_outlined),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _onTapSignInButton,
+                      child: Icon(Icons.double_arrow_outlined),
+                    ),
                   ),
                 ),
                 SizedBox(height: 5.h),
@@ -115,9 +124,7 @@ class _LogInScreenState extends State<LogInScreen> {
   void _onTapSignUpButton() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => const RegisterScreen(),
-      ),
+      MaterialPageRoute(builder: (context) => const RegisterScreen()),
     );
   }
 
@@ -129,10 +136,34 @@ class _LogInScreenState extends State<LogInScreen> {
     super.dispose();
   }
 
-  Future<void> _logIn() async{
+  Future<void> _logIn() async {
     _loginInProgress = true;
     setState(() {});
+    Map<String, dynamic> requestBody = {
+      "email": _emailTEController.text.trim(),
+      "password": _passwordTEController.text,
+    };
 
+    NetworkResponse response = await NetworkClient.postRequest(
+      url: Urls.loginUrl,
+      body: requestBody,
+    );
+    _loginInProgress = false;
+    setState(() {});
+
+    if (response.isSuccess) {
+      LoginModel loginModel = LoginModel.fromJason(response.data!);
+      AuthController.saveUserInformation(
+        loginModel.token,
+        loginModel.userModel,
+      );
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => UserHomeScreen()),
+        (predicate) => false,
+      );
+    }else{
+      showSnackBarMessage(context, response.errorMassage!, true);
+    }
   }
-
 }

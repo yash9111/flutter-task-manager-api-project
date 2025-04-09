@@ -8,7 +8,7 @@ class CancelScreen extends StatefulWidget {
 
   final List<Task> tasks;
   final void Function(int) deleteTask;
-  final Color Function(String) getChipColor;
+  final Color Function(taskStatus) getChipColor;
 
   @override
   State<CancelScreen> createState() => _CancelScreenState();
@@ -17,7 +17,7 @@ class CancelScreen extends StatefulWidget {
 class _CancelScreenState extends State<CancelScreen> {
   @override
   Widget build(BuildContext context) {
-    List<Task> canceledTasks = widget.tasks.where((task) => task.status == "Canceled").toList();
+    List<Task> canceledTasks = widget.tasks.where((task) => task.status == taskStatus.Cancel).toList();
     return ListView.separated(
       itemCount: canceledTasks.length,
       itemBuilder: (context, index) {

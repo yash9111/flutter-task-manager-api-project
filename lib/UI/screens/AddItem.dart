@@ -25,7 +25,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   }
 
   void addTask(String title, String description){
-    Task newTask = Task(title, description, "new");
+    Task newTask = Task(title, description, taskStatus.New);
     widget.tasks.add(newTask);
   }
 

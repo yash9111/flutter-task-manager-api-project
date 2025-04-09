@@ -12,9 +12,133 @@ import 'NewTaskScreen.dart';
 import 'ProgressTaskScreen.dart';
 
 class UserHomeScreen extends StatefulWidget {
-  UserHomeScreen({super.key, required this.tasks});
+  UserHomeScreen({super.key});
 
-  List<Task> tasks = [];
+  final List<Task> tasks = [
+    Task(
+      "Daily Exercise",
+      "30 minutes of cardio and stretching",
+      taskStatus.New,
+    ),
+    Task(
+      "Build Portfolio",
+      "Create a personal website showcasing projects",
+      taskStatus.Progress,
+    ),
+    Task("Memorize Quran", "Start with last 10 surahs", taskStatus.New),
+    Task(
+      "Contribute to Open Source",
+      "Find a beginner-friendly GitHub repo",
+      taskStatus.New,
+    ),
+    Task(
+      "Improve English",
+      "Read one non-fiction book per month",
+      taskStatus.New,
+    ),
+    Task(
+      "Start YouTube Channel",
+      "Teach Flutter concepts weekly",
+      taskStatus.New,
+    ),
+    Task(
+      "Master DSA in Python",
+      "Complete Abdul Bari's course",
+      taskStatus.Progress,
+    ),
+    Task(
+      "Travel to Turkey",
+      "Explore Islamic history and architecture",
+      taskStatus.New,
+    ),
+    Task("Learn Cooking", "Master 10 basic healthy meals", taskStatus.New),
+    Task("Read a Self-Help Book", "Start with 'Atomic Habits'", taskStatus.New),
+    Task(
+      "Build a Flutter App",
+      "Prayer reminder with hadith of the day",
+      taskStatus.Progress,
+    ),
+    Task(
+      "Get Internship",
+      "Apply to 5 remote companies each week",
+      taskStatus.Progress,
+    ),
+    Task("Charity Work", "Volunteer locally once a month", taskStatus.New),
+    Task("Sleep Early", "Maintain a 10:30 PM bedtime", taskStatus.New),
+    Task(
+      "Digital Minimalism",
+      "Avoid phone use 1 hour after waking up",
+      taskStatus.Progress,
+    ),
+    Task("Tomorrow University", "Operating System Lab final", taskStatus.New),
+    Task("Reading Quran", "Surah Baqarah", taskStatus.New),
+    Task("Going Hajj", "After earning decent amount of money", taskStatus.New),
+    Task("Learning Flutter", "Operating System Lab final", taskStatus.Progress),
+    Task(
+      "Daily Exercise",
+      "30 minutes of cardio and stretching",
+      taskStatus.New,
+    ),
+    Task(
+      "Build Portfolio",
+      "Create a personal website showcasing projects",
+      taskStatus.Progress,
+    ),
+    Task("Memorize Quran", "Start with last 10 surahs", taskStatus.New),
+    Task(
+      "Contribute to Open Source",
+      "Find a beginner-friendly GitHub repo",
+      taskStatus.New,
+    ),
+    Task(
+      "Improve English",
+      "Read one non-fiction book per month",
+      taskStatus.Complete,
+    ),
+    Task(
+      "Start YouTube Channel",
+      "Teach Flutter concepts weekly",
+      taskStatus.Cancel,
+    ),
+    Task(
+      "Master DSA in Python",
+      "Complete Abdul Bari's course",
+      taskStatus.Progress,
+    ),
+    Task(
+      "Travel to Turkey",
+      "Explore Islamic history and architecture",
+      taskStatus.New,
+    ),
+    Task("Learn Cooking", "Master 10 basic healthy meals", taskStatus.Complete),
+    Task(
+      "Read a Self-Help Book",
+      "Finished 'Atomic Habits'",
+      taskStatus.Complete,
+    ),
+    Task(
+      "Build a Flutter App",
+      "Prayer reminder with hadith of the day",
+      taskStatus.Progress,
+    ),
+    Task(
+      "Get Internship",
+      "Apply to 5 remote companies each week",
+      taskStatus.Progress,
+    ),
+    Task("Charity Work", "Volunteer locally once a month", taskStatus.New),
+    Task("Sleep Early", "Maintain a 10:30 PM bedtime", taskStatus.Cancel),
+    Task(
+      "Digital Minimalism",
+      "Avoid phone use 1 hour after waking up",
+      taskStatus.Complete,
+    ),
+    Task(
+      "Learn Spanish",
+      "Tried Duolingo but dropped after 3 days",
+      taskStatus.Cancel,
+    ),
+  ];
 
   @override
   State<UserHomeScreen> createState() => _UserHomeScreenState();
@@ -25,39 +149,37 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   int selectedIndex = 0;
 
   void showWelcomeMessage() {
-    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Welcome", textAlign: TextAlign.center),
-        content: Column(
-          mainAxisSize: MainAxisSize.min, // Prevent overflow issues
-          children: [
-            Text(args?['data'] ?? "No Data"),
-            SizedBox(height: 10),
-            Text('Sign In Successful'),
-          ],
-        ),
-        backgroundColor: Colors.green,
-      ),
+      builder:
+          (context) => AlertDialog(
+            title: Text("Welcome", textAlign: TextAlign.center),
+            content: Column(
+              mainAxisSize: MainAxisSize.min, // Prevent overflow issues
+              children: [
+                Text(args?['data'] ?? "No Data"),
+                SizedBox(height: 10),
+                Text('Sign In Successful'),
+              ],
+            ),
+            backgroundColor: Colors.green,
+          ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-
-    final args = ModalRoute.of(context)!.settings.arguments as Map;
-
-
-    Color getChipColor(String status) {
-      if (status == "new") {
+    Color getChipColor(taskStatus status) {
+      if (status == taskStatus.New) {
         return Colors.blue;
-      } else if (status == "Completed") {
+      } else if (status == taskStatus.Complete) {
         return Colors.green;
-      } else if (status == "Progress") {
+      } else if (status == taskStatus.Progress) {
         return Colors.purple;
-      } else if (status == "Canceled") {
+      } else if (status == taskStatus.Cancel) {
         return Colors.red;
       }
       return Colors.white;
@@ -78,7 +200,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               TextButton(
                 onPressed: () {
                   setState(() {
-                    if (widget.tasks.contains(deletedTask)){
+                    if (widget.tasks.contains(deletedTask)) {
                       return;
                     }
                     widget.tasks.insert(index, deletedTask);
@@ -93,14 +215,30 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     }
 
     List<Widget> screens = [
-      NewTaskScreen(tasks: widget.tasks, getChipColor: getChipColor, deleteTask: deleteTask),
-      ProgressTaskScreen(tasks: widget.tasks, getChipColor: getChipColor, deleteTask: deleteTask),
-      CompletedTaskScreen(tasks: widget.tasks, getChipColor: getChipColor, deleteTask: deleteTask),
-      CancelScreen(tasks: widget.tasks, getChipColor: getChipColor, deleteTask: deleteTask),
+      NewTaskScreen(
+        tasks: widget.tasks,
+        getChipColor: getChipColor,
+        deleteTask: deleteTask,
+      ),
+      ProgressTaskScreen(
+        tasks: widget.tasks,
+        getChipColor: getChipColor,
+        deleteTask: deleteTask,
+      ),
+      CompletedTaskScreen(
+        tasks: widget.tasks,
+        getChipColor: getChipColor,
+        deleteTask: deleteTask,
+      ),
+      CancelScreen(
+        tasks: widget.tasks,
+        getChipColor: getChipColor,
+        deleteTask: deleteTask,
+      ),
     ];
 
     return Scaffold(
-      appBar: TMAppBar(args: args),
+      appBar: TMAppBar(),
       body: Column(
         children: [
           SingleChildScrollView(
@@ -138,27 +276,18 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         child: Icon(Icons.add),
       ),
       bottomNavigationBar: NavigationBar(
-          selectedIndex: selectedIndex,
-          onDestinationSelected: (idx) => setState(() => selectedIndex = idx),
-          destinations: [
-            NavigationDestination(
-              icon: Icon(Icons.new_label),
-              label: 'New',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.ac_unit_sharp),
-              label: 'Progress',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.done),
-              label: 'Completed',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.cancel),
-              label: 'Canceled',
-            ),
-          ]),
+        selectedIndex: selectedIndex,
+        onDestinationSelected: (idx) => setState(() => selectedIndex = idx),
+        destinations: [
+          NavigationDestination(icon: Icon(Icons.new_label), label: 'New'),
+          NavigationDestination(
+            icon: Icon(Icons.ac_unit_sharp),
+            label: 'Progress',
+          ),
+          NavigationDestination(icon: Icon(Icons.done), label: 'Completed'),
+          NavigationDestination(icon: Icon(Icons.cancel), label: 'Canceled'),
+        ],
+      ),
     );
   }
 }
-

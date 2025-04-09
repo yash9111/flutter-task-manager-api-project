@@ -8,7 +8,7 @@ class ProgressTaskScreen extends StatefulWidget {
 
   final List<Task> tasks;
   final void Function(int) deleteTask;
-  final Color Function(String) getChipColor;
+  final Color Function(taskStatus) getChipColor;
 
   @override
   State<ProgressTaskScreen> createState() => _ProgressTaskScreenState();
@@ -17,7 +17,7 @@ class ProgressTaskScreen extends StatefulWidget {
 class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
   @override
   Widget build(BuildContext context) {
-    List<Task> completedTask = widget.tasks.where((task) => task.status == "Progress").toList();
+    List<Task> completedTask = widget.tasks.where((task) => task.status == taskStatus.Progress).toList();
     return ListView.separated(
       itemCount: completedTask.length,
       itemBuilder: (context, index) {

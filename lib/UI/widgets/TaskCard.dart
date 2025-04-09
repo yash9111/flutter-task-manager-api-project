@@ -5,7 +5,7 @@ import '../../Data/model/task.dart';
 class TaskCard extends StatelessWidget {
   final Task task;
   final int index;
-  final Color Function(String status) getChipColor;
+  final Color Function(taskStatus status) getChipColor;
   final void Function(int index) deleteTask;
 
   TaskCard({
@@ -29,8 +29,12 @@ class TaskCard extends StatelessWidget {
                 Text(task.date, style: TextStyle(fontSize: 12)),
                 Chip(
                   backgroundColor: getChipColor(task.status),
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.transparent),
+                    borderRadius: BorderRadius.circular(8)
+                  ),
                   label: Text(
-                    task.status,
+                    task.status.name,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 12,
@@ -38,9 +42,9 @@ class TaskCard extends StatelessWidget {
                   ),
                   padding: EdgeInsets.symmetric(
                     horizontal: 10,
-                    vertical: 2,
                   ),
                   visualDensity: VisualDensity(vertical: -4),
+
                 ),
               ],
             ),

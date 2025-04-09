@@ -46,8 +46,8 @@ class NetworkClient {
     }
   }
 
-  static Future<NetworkResponse> postRequest(
-    String url, {
+  static Future<NetworkResponse> postRequest({
+    required String url,
     Map<String, dynamic>? body,
   }) async {
     try {
@@ -55,7 +55,7 @@ class NetworkClient {
       Response response = await post(
         uri,
         headers: {'Content-Type': 'application/json'},
-        body: body,
+        body: jsonEncode(body),
       );
       if (response.statusCode == 200) {
         final jsonDecodedData = jsonDecode(response.body);

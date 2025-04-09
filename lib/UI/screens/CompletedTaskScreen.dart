@@ -8,7 +8,7 @@ class CompletedTaskScreen extends StatefulWidget {
 
   final List<Task> tasks;
   final void Function(int) deleteTask;
-  final Color Function(String) getChipColor;
+  final Color Function(taskStatus) getChipColor;
 
   @override
   State<CompletedTaskScreen> createState() => _CompletedTaskScreenState();
@@ -17,7 +17,7 @@ class CompletedTaskScreen extends StatefulWidget {
 class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
   @override
   Widget build(BuildContext context) {
-    List<Task> completedTask = widget.tasks.where((task) => task.status == "Completed").toList();
+    List<Task> completedTask = widget.tasks.where((task) => task.status == taskStatus.Complete).toList();
     return ListView.separated(
       itemCount: completedTask.length,
       itemBuilder: (context, index) {

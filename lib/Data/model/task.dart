@@ -1,9 +1,16 @@
 import 'package:date_time_format/date_time_format.dart';
 
+enum taskStatus{
+  Progress,
+  New,
+  Complete,
+  Cancel
+}
+
 class Task {
   String title;
   String taskDetails;
-  String status;
+  taskStatus status;
   String date;
 
   Task(this.title, this.taskDetails, this.status)

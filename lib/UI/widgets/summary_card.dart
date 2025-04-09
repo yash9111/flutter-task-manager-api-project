@@ -17,7 +17,7 @@ class SummaryCard extends StatelessWidget {
             fontSize: 20,
           ),
         ),
-        Text(title, style: TextStyle(color: Colors.grey)),
+        Text(title, style: TextStyle(color: Colors.black87)),
       ],
     );
   }

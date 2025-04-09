@@ -18,12 +18,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
 
   TextEditingController setPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
-  List<Task> tasks = [
-    Task('University', "after eid", "new"),
-    Task('Mosque', "after migration", "Completed"),
-    Task('Hajj', "after having descent amount of money", "Canceled"),
-    Task('Charity', "51% of income inshaAllah", "Progress"),
-  ];
+
   @override
   void dispose() {
     setPasswordController.dispose();

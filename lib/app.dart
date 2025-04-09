@@ -22,6 +22,7 @@ class _TaskManagerAppState extends State<TaskManagerApp> {
       builder: (context, orientation, screenType) {
         return MaterialApp(
           theme: ThemeData(
+            colorScheme: ColorScheme(brightness: Brightness.light, primary: Colors.green, onPrimary: Colors.green, secondary: Colors.green, onSecondary: Colors.white, error: Colors.red, onError: Colors.white, surface: Colors.white, onSurface: Colors.black),
             textTheme: GoogleFonts.workSansTextTheme(textTheme),
             inputDecorationTheme: InputDecorationTheme(
               border: OutlineInputBorder(
