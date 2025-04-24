@@ -3,4 +3,7 @@ class Urls{
 
   static const String registerUrl = '$_baseUrl/Registration';
   static const String loginUrl = '$_baseUrl/Login';
+  static const String recoverVerifyEmailUrl = '$_baseUrl/RecoverVerifyEmail/';
+  static const String recoverVerifyPinUrl = '$_baseUrl/RecoverVerifyOtp/';
+  static const String recoverResetPasswordUrl = "$_baseUrl/RecoverResetPassword";
 }

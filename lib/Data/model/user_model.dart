@@ -38,6 +38,6 @@ class UserModel {
   }
 
   String get fullName{
-    return '${firstName} ${lastName}';
+    return '$firstName $lastName';
   }
 }

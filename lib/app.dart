@@ -9,6 +9,8 @@ import 'Data/model/task.dart';
 class TaskManagerApp extends StatefulWidget {
   const TaskManagerApp({super.key});
 
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   State<TaskManagerApp> createState() => _TaskManagerAppState();
 }

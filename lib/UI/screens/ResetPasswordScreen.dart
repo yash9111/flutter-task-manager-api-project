@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_task_manager_api_project/Data/Services/network_client.dart';
+import 'package:flutter_task_manager_api_project/Data/utils/urls.dart';
 import 'package:flutter_task_manager_api_project/UI/widgets/backgroundSVG.dart';
 import 'package:sizer/sizer.dart';
-
-import 'RegisterScreen.dart';
+import '../widgets/show_snakbar_message.dart';
 import 'log_in_screen.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
-  const ResetPasswordScreen({super.key});
+  const ResetPasswordScreen({
+    super.key,
+    required this.email,
+    required this.otp,
+  });
+
+  final String email;
+  final String otp;
 
   @override
   State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
@@ -15,6 +23,7 @@ class ResetPasswordScreen extends StatefulWidget {
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  bool recoverResetPasswordInProgress = false;
 
   @override
   void dispose() {
@@ -47,26 +56,28 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   children: [
                     TextFormField(
                       controller: newPasswordController,
+                      obscureText: true,
                       decoration: InputDecoration(hintText: 'New Password'),
                     ),
+                    SizedBox(height: 1.h),
                     TextFormField(
                       controller: confirmPasswordController,
+                      obscureText: true,
                       decoration: InputDecoration(hintText: 'Confirm Password'),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => RegisterScreen(),
-                      ),
-                    );
-                  },
-                  child: Icon(Icons.double_arrow_sharp, color: Colors.white),
+              Visibility(
+                visible: recoverResetPasswordInProgress == false,
+                replacement: CircularProgressIndicator(),
+                child: SizedBox(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _onTapSubmitButton();
+                    },
+                    child: Icon(Icons.double_arrow_sharp, color: Colors.white),
+                  ),
                 ),
               ),
               SizedBox(height: 5.h),
@@ -92,5 +103,38 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         ),
       ),
     );
+  }
+
+  void _onTapSubmitButton() {
+    recoverResetPassword();
+  }
+
+  Future<void> recoverResetPassword() async {
+    if (newPasswordController.text.isNotEmpty &&
+        newPasswordController.text == confirmPasswordController.text &&
+        confirmPasswordController.text.isNotEmpty) {
+      Map<String, dynamic> recoverResetPasswordBody = {
+        "email": widget.email,
+        "OTP": widget.otp,
+        "password": newPasswordController.text,
+      };
+      recoverResetPasswordInProgress = true;
+      setState(() {});
+      NetworkResponse response = await NetworkClient.postRequest(
+        url: Urls.recoverResetPasswordUrl,
+        body: recoverResetPasswordBody,
+      );
+      recoverResetPasswordInProgress = false;
+      setState(() {});
+
+      if (response.isSuccess){
+        showSnackBarMessage(context, "Login with your email and password");
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => LogInScreen()),
+              (predicate) => false,
+        );
+      }
+
+    }
   }
 }
