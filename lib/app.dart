@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 
-import 'Data/model/task.dart';
+import 'Data/model/task_model.dart';
 
 class TaskManagerApp extends StatefulWidget {
   const TaskManagerApp({super.key});

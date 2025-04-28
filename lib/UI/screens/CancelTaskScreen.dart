@@ -1,41 +1,69 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_task_manager_api_project/Data/Services/network_client.dart';
+import 'package:flutter_task_manager_api_project/Data/model/Task_List_Model.dart';
+import 'package:flutter_task_manager_api_project/Data/utils/urls.dart';
 import 'package:flutter_task_manager_api_project/UI/widgets/TaskCard.dart';
+import 'package:flutter_task_manager_api_project/UI/widgets/show_snakbar_message.dart';
 
-import '../../Data/model/task.dart';
+import '../../Data/model/task_model.dart';
 
 class CancelScreen extends StatefulWidget {
-  const CancelScreen({super.key, required this.tasks, required this.deleteTask, required this.getChipColor});
+  const CancelScreen({
+    super.key,
+    required this.deleteTask,
+    required this.getChipColor,
+  });
 
-  final List<Task> tasks;
-  final void Function(int) deleteTask;
-  final Color Function(taskStatus) getChipColor;
+  final Future<void> Function(TaskModel task) deleteTask;
+  final Color Function(String status) getChipColor;
 
   @override
-  State<CancelScreen> createState() => _CancelScreenState();
+  State<CancelScreen> createState() => CancelScreenState();
 }
 
-class _CancelScreenState extends State<CancelScreen> {
+class CancelScreenState extends State<CancelScreen> {
+  bool _isGetCancelledTaskInProgress = false;
+  List<TaskModel> cancelledTaskList = [];
+
+  @override
+  void initState() {
+    getCancelledTasks();
+    super.initState();
+  }
+
+  Future<void> getCancelledTasks() async {
+    _isGetCancelledTaskInProgress = true;
+    setState(() {});
+
+    NetworkResponse response = await NetworkClient.getRequest(
+      url: Urls.getCanceledTaskUrl,
+    );
+
+    if (response.isSuccess) {
+      TaskListModel taskListModel = TaskListModel.fromJson(response.data ?? {});
+      cancelledTaskList = taskListModel.taskList;
+    } else {
+      showSnackBarMessage(context, "${response.errorMessage}", true);
+    }
+
+    _isGetCancelledTaskInProgress = false;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<Task> canceledTasks = widget.tasks.where((task) => task.status == taskStatus.Cancel).toList();
+
     return ListView.separated(
-      itemCount: canceledTasks.length,
+      itemCount: cancelledTaskList.length,
       itemBuilder: (context, index) {
-        if (index == canceledTasks.length - 1){
-          return Column(
-            children: [
-              TaskCard(
-                task: canceledTasks[index],
-                index: index,
-                getChipColor: widget.getChipColor,
-                deleteTask: widget.deleteTask,
-              ),
-              SizedBox(height: 67),
-            ],
-          );
-        }
-        return TaskCard(task: canceledTasks[index], index: index, getChipColor: widget.getChipColor, deleteTask: widget.deleteTask);
+        return TaskCard(
+          task: cancelledTaskList[index],
+          getChipColor: widget.getChipColor,
+          deleteTask: widget.deleteTask,
+          getTask: getCancelledTasks,
+        );
       },
-      separatorBuilder: (context, index) => const SizedBox(height: 5),);
+      separatorBuilder: (context, index) => const SizedBox(height: 5),
+    );
   }
 }

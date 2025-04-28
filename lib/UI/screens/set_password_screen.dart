@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_task_manager_api_project/UI/widgets/backgroundSVG.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../Data/model/task.dart';
+import '../../Data/model/task_model.dart';
 
 class SetPasswordScreen extends StatefulWidget {
   const SetPasswordScreen({super.key});

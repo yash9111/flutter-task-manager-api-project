@@ -30,7 +30,7 @@ class NetworkClient {
       Map<String, String> headers = {'token': AuthController.token ?? ""};
       _preRequestLog(headers, url);
 
-      Response response = await get(uri);
+      Response response = await get(uri, headers: headers);
 
       _postRequestLog(url, response.statusCode, headers: response.headers, responseBody: response.body);
 
@@ -82,7 +82,7 @@ class NetworkClient {
 
       Response response = await post(
         uri,
-        headers: {'Content-Type': 'application/json'},
+        headers: headers,
         body: jsonEncode(body),
       );
 
