@@ -14,21 +14,23 @@ class NewTaskScreen extends StatefulWidget {
     super.key,
     required this.deleteTask,
     required this.getChipColor,
+    required this.taskCount
   });
 
   final Future<void> Function(TaskModel task) deleteTask;
   final Color Function(String status) getChipColor;
+final Future<void> Function() taskCount;
 
   @override
   State<NewTaskScreen> createState() => NewTaskScreenState();
 }
 
 class NewTaskScreenState extends State<NewTaskScreen> {
-  bool _isGetCompletedTaskIsInProgress = false;
+  bool _isGetNewTaskIsInProgress = false;
   List<TaskModel> newTaskList = [];
 
   Future<void> getNewTask() async {
-    _isGetCompletedTaskIsInProgress = true;
+    _isGetNewTaskIsInProgress = true;
     setState(() {});
 
     NetworkResponse response = await NetworkClient.getRequest(
@@ -41,7 +43,7 @@ class NewTaskScreenState extends State<NewTaskScreen> {
       showSnackBarMessage(context, "$response.errorMessage", true);
     }
 
-    _isGetCompletedTaskIsInProgress = false;
+    _isGetNewTaskIsInProgress = false;
     setState(() {});
   }
 
@@ -53,17 +55,22 @@ class NewTaskScreenState extends State<NewTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: newTaskList.length,
-      itemBuilder: (context, index) {
-        return TaskCard(
-          task: newTaskList[index],
-          getChipColor: widget.getChipColor,
-          deleteTask: widget.deleteTask,
-          getTask: getNewTask,
-        );
-      },
-      separatorBuilder: (context, index) => const SizedBox(height: 5),
+    return Visibility(
+      replacement: CenterCircularProgressIndicator(),
+      visible: !_isGetNewTaskIsInProgress,
+      child: ListView.separated(
+        itemCount: newTaskList.length,
+        itemBuilder: (context, index) {
+          return TaskCard(
+            task: newTaskList[index],
+            getChipColor: widget.getChipColor,
+            deleteTask: widget.deleteTask,
+            getTask: getNewTask,
+            fetchTaskCount: widget.taskCount,
+          );
+        },
+        separatorBuilder: (context, index) => const SizedBox(height: 5),
+      ),
     );
   }
 }

@@ -23,4 +23,8 @@ class Urls{
 
   //=============Task status update==========
   static String updateTaskStatusUrl (String taskId, String status) => '$_baseUrl/updateTaskStatus/$taskId/$status';
+
+  //=============Task count of status========
+  static String getTaskStatusCountUrl = '$_baseUrl/taskStatusCount';
+
 }

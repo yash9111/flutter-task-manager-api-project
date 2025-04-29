@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_task_manager_api_project/Data/Services/network_client.dart';
 import 'package:flutter_task_manager_api_project/Data/model/Task_List_Model.dart';
 import 'package:flutter_task_manager_api_project/Data/utils/urls.dart';
+import 'package:flutter_task_manager_api_project/UI/widgets/CenterCircullarProgressIndicator.dart';
 import 'package:flutter_task_manager_api_project/UI/widgets/TaskCard.dart';
 import 'package:flutter_task_manager_api_project/UI/widgets/show_snakbar_message.dart';
 
@@ -11,11 +12,12 @@ class ProgressTaskScreen extends StatefulWidget {
   const ProgressTaskScreen({
     super.key,
     required this.deleteTask,
-    required this.getChipColor,
+    required this.getChipColor, required this.taskCount,
   });
 
   final Future<void> Function(TaskModel task) deleteTask;
   final Color Function(String status) getChipColor;
+  final Future<void> Function() taskCount;
 
   @override
   State<ProgressTaskScreen> createState() => ProgressTaskScreenState();
@@ -53,17 +55,22 @@ class ProgressTaskScreenState extends State<ProgressTaskScreen> {
   @override
   Widget build(BuildContext context) {
 
-    return ListView.separated(
-      itemCount: progressTaskList.length,
-      itemBuilder: (context, index) {
-        return TaskCard(
-          task: progressTaskList[index],
-          getChipColor: widget.getChipColor,
-          deleteTask: widget.deleteTask,
-          getTask: getProgressTasks,
-        );
-      },
-      separatorBuilder: (context, index) => const SizedBox(height: 5),
+    return Visibility(
+      replacement: CenterCircularProgressIndicator(),
+      visible: !_isGetProgressTaskInProgress,
+      child: ListView.separated(
+        itemCount: progressTaskList.length,
+        itemBuilder: (context, index) {
+          return TaskCard(
+            task: progressTaskList[index],
+            getChipColor: widget.getChipColor,
+            deleteTask: widget.deleteTask,
+            getTask: getProgressTasks,
+            fetchTaskCount: widget.taskCount,
+          );
+        },
+        separatorBuilder: (context, index) => const SizedBox(height: 5),
+      ),
     );
   }
 }

@@ -11,12 +11,14 @@ class TaskCard extends StatefulWidget {
   final Color Function(String status) getChipColor;
   final Future<void> Function(TaskModel task) deleteTask;
   final Future<void> Function() getTask;
+  final Future<void> Function() fetchTaskCount;
 
   TaskCard({
     super.key,
     required this.task,
     required this.getChipColor,
     required this.deleteTask, required this.getTask,
+    required this.fetchTaskCount,
   });
 
   @override
@@ -140,6 +142,7 @@ class _TaskCardState extends State<TaskCard> {
                 } else {
                   showSnackBarMessage(context, '${task.title} update failed!', true);
                 }
+                await widget.fetchTaskCount();
                 Navigator.pop(context);
               },
               child: Text("Update"),

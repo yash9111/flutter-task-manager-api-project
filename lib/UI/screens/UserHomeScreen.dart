@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_task_manager_api_project/Data/Services/network_client.dart';
+import 'package:flutter_task_manager_api_project/Data/model/Task_Status_Count.dart';
 import 'package:flutter_task_manager_api_project/UI/screens/add_task.dart';
 import 'package:flutter_task_manager_api_project/UI/widgets/show_snakbar_message.dart';
 import 'package:flutter_task_manager_api_project/UI/widgets/summary_card.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:flutter_task_manager_api_project/Data/model/Task_Status_Count_List_Model.dart';
 import 'package:flutter_task_manager_api_project/Data/model/task_model.dart';
-
 import '../../Data/utils/urls.dart';
 import '../widgets/TMAppBar.dart';
 import 'CancelTaskScreen.dart';
@@ -23,6 +23,11 @@ class UserHomeScreen extends StatefulWidget {
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
   int selectedIndex = 0;
+
+  int newTaskCount = 0;
+  int completeTaskCount = 0;
+  int progressTaskCount = 0;
+  int cancelTaskCount = 0;
 
   final GlobalKey<NewTaskScreenState> _newTaskKey = GlobalKey();
   final GlobalKey<ProgressTaskScreenState> _progressTaskKey = GlobalKey();
@@ -58,6 +63,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         "${task.title} has been deleted successfully.",
       );
       _refreshCurrentScreen();
+      await fetchTaskCount();
       return true;
     } else {
       showSnackBarMessage(context, "${response.errorMessage}");
@@ -65,7 +71,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     }
   }
 
-  void _refreshCurrentScreen() {
+  void _refreshCurrentScreen() async{
     if (selectedIndex == 0) {
       _newTaskKey.currentState?.getNewTask();
     } else if (selectedIndex == 1) {
@@ -75,8 +81,42 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     } else if (selectedIndex == 3) {
       _cancelTaskKey.currentState?.getCancelledTasks();
     }
+    await fetchTaskCount();
   }
 
+  Future<void> fetchTaskCount() async{
+    NetworkResponse response = await NetworkClient.getRequest(url: Urls.getTaskStatusCountUrl);
+
+    int newCount = 0;
+    int progressCount = 0;
+    int completeCount = 0;
+    int cancelCount = 0;
+
+    if (response.isSuccess){
+      var taskCountList = TaskStatusCountListModel.fromJson(response.data!);
+        for (TaskStatusCountModel taskCount in taskCountList.statusCountList){
+          if (taskCount.status == "New"){
+            newCount = taskCount.count;
+          }
+          else if (taskCount.status == "Progress"){
+            progressCount = taskCount.count;
+          }
+          else if (taskCount.status == "Complete"){
+            completeCount = taskCount.count;
+          }
+          else if (taskCount.status == "Cancel"){
+            cancelCount = taskCount.count;
+          }
+        }
+
+        setState(() {
+          newTaskCount = newCount;
+          progressTaskCount = progressCount;
+          cancelTaskCount = cancelCount;
+          completeTaskCount = completeCount;
+        });
+    }
+  }
 
   @override
   void initState() {
@@ -86,22 +126,28 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       key: _newTaskKey,
       getChipColor: getChipColor,
       deleteTask: deleteTask,
+      taskCount: fetchTaskCount,
     );
     _progressTaskScreen = ProgressTaskScreen(
       key: _progressTaskKey,
       getChipColor: getChipColor,
       deleteTask: deleteTask,
+      taskCount: fetchTaskCount,
     );
     _completedTaskScreen = CompletedTaskScreen(
       key: _completedTaskKey,
       getChipColor: getChipColor,
       deleteTask: deleteTask,
+      taskCount: fetchTaskCount,
     );
     _cancelScreen = CancelScreen(
       key: _cancelTaskKey,
       getChipColor: getChipColor,
       deleteTask: deleteTask,
+      taskCount: fetchTaskCount,
     );
+
+    fetchTaskCount();
   }
 
 
@@ -124,11 +170,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             child: Row(
               spacing: 10.w,
               children: [
-                SummaryCard(title: "new", count: 09),
-                // You'll need to fetch actual counts
-                SummaryCard(title: "progressing", count: 09),
-                SummaryCard(title: "completed", count: 09),
-                SummaryCard(title: "canceled", count: 09),
+                SummaryCard(title: "New", count: newTaskCount),
+                SummaryCard(title: "progressing", count: progressTaskCount),
+                SummaryCard(title: "completed", count: completeTaskCount),
+                SummaryCard(title: "canceled", count: cancelTaskCount),
               ],
             ),
           ),
