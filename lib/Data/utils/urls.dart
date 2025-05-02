@@ -27,4 +27,7 @@ class Urls{
   //=============Task count of status========
   static String getTaskStatusCountUrl = '$_baseUrl/taskStatusCount';
 
+  //=============Update Profile call=========
+  static String updateProfileUrl = '$_baseUrl/ProfileUpdate';
+
 }
