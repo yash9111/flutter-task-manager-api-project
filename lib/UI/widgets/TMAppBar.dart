@@ -3,20 +3,30 @@ import 'package:flutter_task_manager_api_project/UI/Controllers/auth_controller.
 import 'package:flutter_task_manager_api_project/UI/screens/UpdateProfileScreen.dart';
 import 'package:flutter_task_manager_api_project/UI/screens/log_in_screen.dart';
 
-class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const TMAppBar({super.key, this.fromProfileScreen});
+class TMAppBar extends StatefulWidget implements PreferredSizeWidget {
+  TMAppBar({super.key, this.fromProfileScreen});
 
   final bool? fromProfileScreen;
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  @override
+  State<TMAppBar> createState() => _TMAppBarState();
+}
+
+class _TMAppBarState extends State<TMAppBar> {
+  late bool isUpdated = false;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.green,
       title: GestureDetector(
-        onTap: (){
-          if (fromProfileScreen ?? false){
+        onTap: () {
+          if (widget.fromProfileScreen ?? false) {
             return;
-          }else{
+          } else {
             _onTapProfileScreen(context);
           }
         },
@@ -49,17 +59,17 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
               ],
             ),
             Spacer(),
-            IconButton(onPressed: (){
-              _onTapLogOutButton(context);
-            }, icon: Icon(Icons.logout, color: Colors.white,),),
+            IconButton(
+              onPressed: () {
+                _onTapLogOutButton(context);
+              },
+              icon: Icon(Icons.logout, color: Colors.white),
+            ),
           ],
         ),
       ),
     );
   }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   Future<void> _onTapLogOutButton(BuildContext context) async {
     await AuthController.clearUserData();
@@ -70,10 +80,13 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  void _onTapProfileScreen(BuildContext context) {
-    Navigator.push(
+  void _onTapProfileScreen(BuildContext context) async {
+    isUpdated = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => UpdateProfileScreen()),
     );
+    if (isUpdated) {
+      setState(() {});
+    }
   }
 }

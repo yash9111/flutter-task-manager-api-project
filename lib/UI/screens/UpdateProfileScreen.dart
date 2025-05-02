@@ -8,6 +8,7 @@ import 'package:flutter_task_manager_api_project/UI/widgets/backgroundSVG.dart';
 import 'package:flutter_task_manager_api_project/UI/widgets/show_snakbar_message.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../Data/model/login_model.dart';
 import '../../ui/screens/log_in_screen.dart';
 import '../widgets/CenterCircullarProgressIndicator.dart';
 
@@ -19,7 +20,6 @@ class UpdateProfileScreen extends StatefulWidget {
 }
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
-
   final TextEditingController _updateEmailController = TextEditingController(
     text: AuthController.userModel?.email ?? "",
   );
@@ -59,7 +59,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               ),
               Text(
                 'Update Profile',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 8),
               Container(
@@ -173,23 +173,38 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       "password": _updatePasswordController.text,
     };
 
-    _updateProfileInProgress = false;
-    setState(() {});
-
     NetworkResponse response = await NetworkClient.postRequest(
       url: Urls.updateProfileUrl,
       body: updateProfileRequestBody,
     );
+    _updateProfileInProgress = false;
+    setState(() {});
 
     if (response.isSuccess) {
-      showSnackBarMessage(context, 'User updated successfully! Please login Again.');
-      sleep(Duration(seconds: 1));
-      await AuthController.clearUserData();
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => LogInScreen()),
-            (predicate) => false,
+      showSnackBarMessage(context, 'User updated successfully!');
+
+      Map<String, dynamic> requestBody = {
+        "email": _updateEmailController.text.trim(),
+        "password": _updatePasswordController.text,
+      };
+
+      NetworkResponse response = await NetworkClient.postRequest(
+        url: Urls.loginUrl,
+        body: requestBody,
       );
+      if (response.isSuccess) {
+
+        LoginModel loginModel = LoginModel.fromJason(response.data!);
+        await AuthController.saveUserInformation(
+          loginModel.token,
+          loginModel.userModel,
+        );
+        setState(() {});
+        AuthController.getUserInformation();
+        Navigator.pop(context, true);
+      } else {
+        showSnackBarMessage(context, response.errorMessage!, true);
+      }
     }
   }
 
