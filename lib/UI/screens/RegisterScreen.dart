@@ -111,9 +111,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           RegExp regExp = RegExp(
                             r"^(?:\+?88|0088)?01[15-9]\d{8}$",
                           );
-                          if (regExp.hasMatch(phone) == false) {
-                            return 'Enter your valid phone';
-                          }
+                          // if (regExp.hasMatch(phone) == false) {
+                          //   return 'Enter your valid phone';
+                          // }
                           return null;
                         },
                       ),
@@ -200,7 +200,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _registrationInProgress = false;
     setState(() {});
 
-    void _clearTextField(){
+    void clearTextField() {
       joinEmailController.clear();
       joinFNameController.clear();
       joinLNameController.clear();
@@ -208,11 +208,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       joinPasswordController.clear();
     }
 
-    if (response.isSuccess){
-      _clearTextField();
+    if (response.isSuccess) {
+      clearTextField();
       showSnackBarMessage(context, 'User registered successfully!');
       Navigator.pop(context);
-    }else{
+    } else {
       showSnackBarMessage(context, '${response.errorMessage}', true);
     }
   }
