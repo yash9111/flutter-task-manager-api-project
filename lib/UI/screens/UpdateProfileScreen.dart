@@ -53,8 +53,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   color: Colors.white,
                 ),
                 clipBehavior: Clip.hardEdge,
-                child: Image.network(
-                  "https://avatars.githubusercontent.com/u/132939355?v=4",
+                child: Image.asset(
+                  'assets/images/profile.jpg',
+                  
                 ),
               ),
               Text(

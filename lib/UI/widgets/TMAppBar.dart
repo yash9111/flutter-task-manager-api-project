@@ -4,7 +4,7 @@ import 'package:flutter_task_manager_api_project/UI/screens/UpdateProfileScreen.
 import 'package:flutter_task_manager_api_project/UI/screens/log_in_screen.dart';
 
 class TMAppBar extends StatefulWidget implements PreferredSizeWidget {
-  TMAppBar({super.key, this.fromProfileScreen});
+  const TMAppBar({super.key, this.fromProfileScreen});
 
   final bool? fromProfileScreen;
 
@@ -40,8 +40,8 @@ class _TMAppBarState extends State<TMAppBar> {
                 color: Colors.white,
               ),
               clipBehavior: Clip.hardEdge,
-              child: Image.network(
-                "https://avatars.githubusercontent.com/u/132939355?v=4",
+              child: Image.asset(
+                'assets/images/profile.jpg',
               ),
             ),
             SizedBox(width: 10),

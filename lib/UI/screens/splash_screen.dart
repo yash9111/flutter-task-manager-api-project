@@ -23,12 +23,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _moveToNextScreen() async {
     await Future.delayed(const Duration(seconds: 2));
-    
+
     final bool userLoggedIn = await AuthController.checkIfUserLoggedIn();
-    
+
     Navigator.of(
       context,
-    ).pushReplacement(MaterialPageRoute(builder: (context) => (userLoggedIn) ? UserHomeScreen() : LogInScreen()));
+    ).pushReplacement(MaterialPageRoute(
+        builder: (context) =>
+            (userLoggedIn) ? UserHomeScreen() : LogInScreen()));
   }
 
   @override
@@ -36,12 +38,30 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: BackgroundSvg(
         child: Positioned(
-            top: 40.h,
-            bottom: 40.h,
-            right: 30.w,
-            left: 30.w,
-            child: SvgPicture.asset('assets/images/logo.svg',)),
-      )
+          top: 35.h,
+          bottom: 35.h,
+          right: 10.w,
+          left: 10.w,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Task Manager',
+                style: TextStyle(
+                  fontSize: 24.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(height: 4.h),
+              CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 3,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
